@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS Accounts (
     Username VARCHAR(32) NOT NULL,
     Email VARCHAR(50) NOT NULL,
     Password VARCHAR(255) NOT NULL,
-    Administrator BOOLEAN NOT NULL
+    role VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Faculties (

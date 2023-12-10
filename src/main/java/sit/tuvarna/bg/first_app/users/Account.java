@@ -1,10 +1,17 @@
-package sit.tuvarna.bg.first_app.Tables;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package sit.tuvarna.bg.first_app.users;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="Accounts")
 public class Account {
@@ -15,45 +22,15 @@ public class Account {
     private String username;
     private String email;
     private String password;
-    private boolean administrator;
+    private String role;
 
-
-    public Account(){}
-
-    public Account(String username, String email, String password, boolean administrator) {
-        //this.id_account = id_account;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.administrator = administrator;
-    }
-
-    public int getId_account() {
-        return id_account;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public boolean isAdministrator() {
-        return administrator;
-    }
 
     @Override
     public String toString() {
         return "Account{" +
                 "username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", administrator=" + administrator +
+                ", roles=" + role +
                 '}';
     }
 

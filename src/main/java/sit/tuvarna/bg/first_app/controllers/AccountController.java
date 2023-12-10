@@ -1,13 +1,13 @@
-package sit.tuvarna.bg.first_app.Controllers;
+package sit.tuvarna.bg.first_app.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import sit.tuvarna.bg.first_app.LogInRequest;
-import sit.tuvarna.bg.first_app.Tables.Account;
+import sit.tuvarna.bg.first_app.repository.AccountRepository;
+import sit.tuvarna.bg.first_app.users.Account;
 
 @RestController
 public class AccountController {
@@ -19,7 +19,7 @@ public class AccountController {
     public String login(@RequestBody LogInRequest logInRequest){
         Account account = accountRepository.findByUsername(logInRequest.getUsername());
         if (account != null && account.getPassword().equals(logInRequest.getPassword())) {
-            if (account.isAdministrator()) {
+            if (account.getRole().equals("ADMIN")) {
                 return "Login successful. User is an admin.";
             } else {
                 return "Login successful. User is not an admin.";
