@@ -33,6 +33,12 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
 
+        /*.formLogin(form -> form
+                        .loginPage("/logIn")
+                        .loginProcessingUrl("/logIn")
+                        .successHandler(successHandler())
+                        .permitAll()*/
+
 
         return http.build();
     }

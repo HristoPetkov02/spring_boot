@@ -1,4 +1,4 @@
-package sit.tuvarna.bg.first_app.repository;
+package sit.tuvarna.bg.first_app.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import sit.tuvarna.bg.first_app.users.Account;
