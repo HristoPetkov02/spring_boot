@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS Departments (
     FOREIGN KEY (Faculty_ID) REFERENCES Faculties(ID_Faculty)
 );
 
-CREATE TABLE IF NOT EXISTS Colleges (
+CREATE TABLE IF NOT EXISTS Collages (
     ID_Collage IDENTITY(1,1) NOT NULL PRIMARY KEY,
     Collage_Name VARCHAR(50) NOT NULL
 );
@@ -48,6 +48,6 @@ CREATE TABLE IF NOT EXISTS Students (
     Room_ID INT,
 
     FOREIGN KEY (Department_ID) REFERENCES Departments(ID_Department),
-    FOREIGN KEY (Collage_ID) REFERENCES Colleges(ID_Collage),
+    FOREIGN KEY (Collage_ID) REFERENCES Collages(ID_Collage),
     FOREIGN KEY (Room_ID) REFERENCES Rooms(ID_Room)
 );

@@ -1,9 +1,7 @@
 package sit.tuvarna.bg.first_app.tables;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "Students")
@@ -24,8 +22,8 @@ public class Student {
     private Department department;
 
     @ManyToOne
-    @JoinColumn(name = "College_ID")
-    private College college;
+    @JoinColumn(name = "Collage_ID")
+    private Collage collage;
 
     @ManyToOne
     @JoinColumn(name = "Room_ID")
