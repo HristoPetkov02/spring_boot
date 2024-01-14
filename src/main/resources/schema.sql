@@ -1,5 +1,5 @@
-CREATE TABLE IF NOT EXISTS Accounts (
-    ID_Account IDENTITY(1,1) NOT NULL PRIMARY KEY, --IDENTITY за auto increment
+CREATE TABLE IF NOT EXISTS Users (
+    ID_User IDENTITY(1,1) NOT NULL PRIMARY KEY, --IDENTITY за auto increment
     Username VARCHAR(32) NOT NULL,
     Email VARCHAR(50) NOT NULL,
     Password VARCHAR(255) NOT NULL,

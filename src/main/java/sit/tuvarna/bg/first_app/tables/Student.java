@@ -1,7 +1,9 @@
 package sit.tuvarna.bg.first_app.tables;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Students")

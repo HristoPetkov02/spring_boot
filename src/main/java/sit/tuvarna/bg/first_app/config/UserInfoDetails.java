@@ -1,29 +1,25 @@
 package sit.tuvarna.bg.first_app.config;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import sit.tuvarna.bg.first_app.users.Account;
+import sit.tuvarna.bg.first_app.users.User;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
-public class AccountInfoDetails implements UserDetails {
+public class UserInfoDetails implements UserDetails {
     private String username;
     private String password;
-    private List<GrantedAuthority> roles;
+    //private List<GrantedAuthority> roles;
 
-    public AccountInfoDetails(Account account){
-        this.username=account.getUsername();
-        this.password=account.getPassword();
-        this.roles= Arrays.stream(account.getRole().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    public UserInfoDetails(User user){
+        this.username= user.getUsername();
+        this.password= user.getPassword();
+        //this.roles= Arrays.stream(user.getRole()).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        return null;
     }
 
     @Override

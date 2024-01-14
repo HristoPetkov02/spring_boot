@@ -6,9 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import sit.tuvarna.bg.first_app.config.AccountInfoDetails;
-import sit.tuvarna.bg.first_app.repositories.AccountRepository;
-import sit.tuvarna.bg.first_app.users.Account;
+import sit.tuvarna.bg.first_app.config.UserInfoDetails;
+import sit.tuvarna.bg.first_app.repositories.UserRepository;
+import sit.tuvarna.bg.first_app.users.User;
 
 import java.util.Optional;
 
@@ -17,11 +17,11 @@ import java.util.Optional;
 public class AccountDetailsService implements UserDetailsService {
 
     @Autowired
-    private AccountRepository repository;
+    private UserRepository repository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Account> account = Optional.ofNullable(repository.findByUsername(username));
-        return account.map(AccountInfoDetails::new).orElseThrow(() ->new UsernameNotFoundException("User doesn't exist"));
+        Optional<User> account = repository.findByUsername(username);
+        return account.map(UserInfoDetails::new).orElseThrow(() ->new UsernameNotFoundException("User doesn't exist"));
     }
 
 }

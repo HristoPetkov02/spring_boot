@@ -8,16 +8,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import sit.tuvarna.bg.first_app.repositories.UserRepository;
+import sit.tuvarna.bg.first_app.users.Role;
+import sit.tuvarna.bg.first_app.users.User;
 
-import sit.tuvarna.bg.first_app.repositories.AccountRepository;
-import sit.tuvarna.bg.first_app.users.Account;
-
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @RestController
-public class AccountController {
+public class UserController {
     @Autowired
-    private AccountRepository repository;
+    private UserRepository repository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -47,15 +48,15 @@ public class AccountController {
     }*/
 
     @PostMapping("/account/save")
-    public ResponseEntity<Object> saveAccount (@RequestBody Account account){
-        if (repository.existsByUsername(account.getUsername()))
+    public ResponseEntity<Object> saveAccount (@RequestBody User user){
+        if (repository.existsByUsername(user.getUsername()))
             return ResponseEntity.status(404).body("This username has been taken");
 
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setRole("USER");//винаги в началото да е USER
-        Account result= repository.save(account);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);//винаги в началото да е USER
+        User result= repository.save(user);
 
-        if(result.getId_account()>0){
+        if(result.getId_user()>0){
             return ResponseEntity.ok("Account was saved");
         }
         return ResponseEntity.status(404).body("Error! Account was not saved.");
@@ -69,6 +70,8 @@ public class AccountController {
 
     @GetMapping("/account/all")
     @PreAuthorize("hasAuthority('ADMIN')")
+    //@CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "http://localhost:3000//account//all")
     public ResponseEntity<Object> getAllAccounts(){
         return ResponseEntity.ok(repository.findAll());
     }
@@ -76,24 +79,24 @@ public class AccountController {
     @PostMapping("/account/grantAuthority")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> grantAuthority(String username){
-        Account account = repository.findByUsername(username);
+        User user = repository.findByUsername(username).orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        if (account == null)
+        if (user == null)
             return ResponseEntity.status(404).body("Account is missing");
-        account.setRole("ADMIN");
-        repository.save(account);
+        user.setRole(Role.ADMIN);
+        repository.save(user);
         return ResponseEntity.ok("Granted authority to "+ username);
     }
 
     @PostMapping("/account/revokeAuthority")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> revokeAuthority(String username){
-        Account account = repository.findByUsername(username);
+        User user = repository.findByUsername(username).orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        if (account == null)
+        if (user == null)
             return ResponseEntity.status(404).body("Account is missing");
-        account.setRole("USER");
-        repository.save(account);
+        user.setRole(Role.USER);
+        repository.save(user);
         return ResponseEntity.ok("Revoked authority to "+ username);
     }
 
