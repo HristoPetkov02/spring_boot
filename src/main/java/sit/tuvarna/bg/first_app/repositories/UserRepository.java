@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     //?1 индикира че ще има параметър и че за сега е placeholder
-    @Query(value="SELECT * FROM Accounts WHERE username = ?1",nativeQuery = true)
+    @Query(value="SELECT * FROM Users WHERE username = ?1",nativeQuery = true)
     //Optional<User> findByUsername(String username);
 
     Optional<User> findByUsername(String username);
