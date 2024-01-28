@@ -23,10 +23,6 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    //трябва ми тайния ключ за да създам и чета JWT
-    //ако не е зададено в application.properties му дава "secret-key" като default стойност
-    //@Value("${security.jwt.token.secret-key:secret-key}")
-    //private String secretKey;
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
     private SecretKey key;
 
@@ -50,7 +46,7 @@ public class JwtService {
                 .issuedAt(new Date(System.currentTimeMillis())) //setIssuedAt deprecated
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))//setExpiration deprecated
                 //ще бъде валиден 30 минути
-                .signWith(key)//, SignatureAlgorithm.HS256
+                .signWith(key)
                 .compact();
     }
 
@@ -70,19 +66,10 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token){
-        /*return Jwts
-                .parser()
-                //.verifyWith((PublicKey) getSignInKey())
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-                //.getBody();*/
         return Jwts
                 .parser()
-                .verifyWith(key)//.setSigningKey(getSignInKey()) deprecated да намеря как да го заменя
+                .verifyWith(key)
                 .build().parseSignedClaims(token).getPayload();
-        //Jwts.parser().verifyWith(key).build().parseSignedClaims(jwt);
     }
 
     public Date extractExpiration(String token) {

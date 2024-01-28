@@ -46,4 +46,10 @@ public class FacultyService {
     public List<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
     }
+
+    public Faculty getFacultyById(Long id) {
+        return facultyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Faculty not found with id: " + id));
+    }
+
 }

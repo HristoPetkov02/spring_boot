@@ -41,21 +41,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        /*http.csrf(AbstractHttpConfigurer::disable)//Cross Site Request Forgery
-                .headers(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-               /* .formLogin(form -> form
-                        .loginPage("http://localhost:3000/login")  // Set the custom login page URL
-                        .permitAll())*//*
-                .httpBasic(Customizer.withDefaults())
-                .headers(AbstractHttpConfigurer::disable).
-                cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
-                .formLogin(Customizer.withDefaults());*/
-
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**")

@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import sit.tuvarna.bg.first_app.ExcelUtils;
 import sit.tuvarna.bg.first_app.services.FacultyService;
 import sit.tuvarna.bg.first_app.tables.Faculty;
-import sit.tuvarna.bg.first_app.users.Role;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +27,6 @@ public class FacultyController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ADMIN')")
-    //@PreAuthorize("hasAuthority(Role.ADMIN)")
     public ResponseEntity<String> addFaculty(@RequestBody Faculty faculty) {
         facultyService.addFaculty(faculty);
         return ResponseEntity.ok("Faculty added successfully");
@@ -58,7 +56,7 @@ public class FacultyController {
         return ResponseEntity.ok("Faculty updated successfully");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
@@ -71,6 +69,15 @@ public class FacultyController {
         List<Faculty> faculties = facultyService.getAllFaculties();
         return ResponseEntity.ok(faculties);
     }
+
+
+    @GetMapping("/{id}/find")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') ")
+    public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
+        Faculty faculty = facultyService.getFacultyById(id);
+        return ResponseEntity.ok(faculty);
+    }
+
 
 
 
