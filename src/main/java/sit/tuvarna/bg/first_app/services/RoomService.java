@@ -47,4 +47,9 @@ public class RoomService {
     public List<Room> getAllRooms() {
         return  roomRepository.findAll();
     }
+
+    public Room getRoomById(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Room not found with id: " + id));
+    }
 }

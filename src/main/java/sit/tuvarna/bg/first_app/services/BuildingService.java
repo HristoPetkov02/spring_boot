@@ -42,4 +42,9 @@ public class BuildingService {
     public List<Building> getAllBuildings() {
         return buildingRepository.findAll();
     }
+
+    public Building getBuildingById(Long id){
+        return buildingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Building not found with id: " + id));
+    }
 }

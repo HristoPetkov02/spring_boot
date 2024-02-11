@@ -31,14 +31,20 @@ public class StudentService {
         Student existingStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student not found with id: " + id));
 
+        if (student.getFirstName() != null)
+            existingStudent.setFirstName(student.getFirstName());
+
+        if (student.getLastName() != null)
+            existingStudent.setLastName(student.getLastName());
+
         if (student.getFn() != null)
             existingStudent.setFn(student.getFn());
 
         if (student.getDepartment() != null)
             existingStudent.setDepartment(student.getDepartment());
 
-        if (student.getCollage() != null)
-            existingStudent.setCollage(student.getCollage());
+        if (student.getCollege() != null)
+            existingStudent.setCollege(student.getCollege());
 
         if (student.getRoom() != null)
             existingStudent.setRoom(student.getRoom());
@@ -48,5 +54,10 @@ public class StudentService {
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
+    }
+
+    public Student getStudentById(Long id) {
+        return studentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Student not found with id: " + id));
     }
 }

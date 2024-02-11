@@ -33,9 +33,13 @@ public class JwtService {
 
 
 
-    //Създаване на token без extra claims
-    public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(),userDetails);
+
+    //Взима UserDetails и генерира token
+    //Взима ролята на потребителя и я добавя към claims
+    public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", userDetails.getAuthorities().toArray()[0].toString());
+        return generateToken(claims, userDetails);
     }
 
     //Създаване на token с екстра claims

@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.web.bind.annotation.*;
 import sit.tuvarna.bg.first_app.auth.AuthenticationRequest;
 import sit.tuvarna.bg.first_app.auth.AuthenticationResponse;
@@ -57,7 +58,7 @@ public class UserController {
 
     @PostMapping("/grantAuthority")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> grantAuthority(@RequestBody Map<String, String> requestMap){
+    public ResponseEntity<Object> grantAuthority(@RequestBody Map<String, String>  requestMap){
         String username = requestMap.get("username");
         User user = repository.findByUsername(username).orElseThrow(() -> new NoSuchElementException("User not found"));
 

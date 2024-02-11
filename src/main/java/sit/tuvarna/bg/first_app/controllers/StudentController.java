@@ -12,8 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sit.tuvarna.bg.first_app.ExcelUtils;
+import sit.tuvarna.bg.first_app.repositories.StudentRepository;
 import sit.tuvarna.bg.first_app.services.StudentService;
-import sit.tuvarna.bg.first_app.tables.Collage;
+import sit.tuvarna.bg.first_app.tables.College;
 import sit.tuvarna.bg.first_app.tables.Department;
 import sit.tuvarna.bg.first_app.tables.Room;
 import sit.tuvarna.bg.first_app.tables.Student;
@@ -59,7 +60,7 @@ public class StudentController {
         return ResponseEntity.ok("Student updated successfully");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteStudent(@PathVariable Long id){
         studentService.deleteStudent(id);
@@ -73,6 +74,13 @@ public class StudentController {
         return  ResponseEntity.ok(students);
     }
 
+    @PostMapping("/{id}/find")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') ")
+    public ResponseEntity<Student> findStudent(@PathVariable Long id){
+        Student student = studentService.getStudentById(id);
+        return ResponseEntity.ok(student);
+    }
+
     //MultipartFile е spring class за обработка на файлове
     private List<Student> readStudentsFromExcel(MultipartFile file) throws IOException {
         //от Apache POI създавам Workbook обект за обработване на excel файла
@@ -81,29 +89,31 @@ public class StudentController {
         Sheet sheet = workbook.getSheetAt(0);
         //DataFormatter се ползвам за да форматирам различните клетки
         DataFormatter dataFormatter = new DataFormatter();
-        // columns: FN, Department_ID, Collage_ID, Room_ID
+        // columns: First_Name, Last_Name, FN, Department_ID, College_ID, Room_ID
 
         List<Student> students = ExcelUtils.extractEntitiesFromSheet(sheet, row -> {
            Student student= new Student();
-           student.setFn(dataFormatter.formatCellValue(row.getCell(0)));
+            student.setFirstName(dataFormatter.formatCellValue(row.getCell(0)));
+            student.setLastName(dataFormatter.formatCellValue(row.getCell(1)));
+           student.setFn(dataFormatter.formatCellValue(row.getCell(2)));
 
             Department department = new Department();
-            Collage collage = new Collage();
+            College college = new College();
             Room room = new Room();
 
-            String departmentIdString = dataFormatter.formatCellValue(row.getCell(1));
+            String departmentIdString = dataFormatter.formatCellValue(row.getCell(3));
             if (!departmentIdString.isEmpty()) {
                 department.setId(Long.parseLong(departmentIdString));
             }
             student.setDepartment(department);
 
-            String collageIdString = dataFormatter.formatCellValue(row.getCell(2));
+            String collageIdString = dataFormatter.formatCellValue(row.getCell(4));
             if (!collageIdString.isEmpty()) {
-                collage.setId(Long.parseLong(collageIdString));
+                college.setId(Long.parseLong(collageIdString));
             }
-            student.setCollage(collage);
+            student.setCollege(college);
 
-            String roomIdString = dataFormatter.formatCellValue(row.getCell(3));
+            String roomIdString = dataFormatter.formatCellValue(row.getCell(5));
             if (!roomIdString.isEmpty()) {
                 room.setId(Long.parseLong(roomIdString));
             }

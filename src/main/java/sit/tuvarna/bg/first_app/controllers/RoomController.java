@@ -58,7 +58,7 @@ public class RoomController {
         return ResponseEntity.ok("Room updated successfully");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteRoom(@PathVariable Long id){
         roomService.deleteRoom(id);
@@ -70,6 +70,13 @@ public class RoomController {
     public ResponseEntity<List<Room>> getAllRooms() {
         List<Room> rooms=roomService.getAllRooms();
         return  ResponseEntity.ok(rooms);
+    }
+
+    @GetMapping("/{id}/find")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') ")
+    public ResponseEntity<Room> getRoomById(@PathVariable Long id){
+        Room room=roomService.getRoomById(id);
+        return  ResponseEntity.ok(room);
     }
 
 

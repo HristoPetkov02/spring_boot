@@ -56,7 +56,7 @@ public class BuildingController {
         return ResponseEntity.ok("Building updated successfully");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteBuilding(@PathVariable Long id){
         buildingService.deleteBuilding(id);
@@ -68,6 +68,13 @@ public class BuildingController {
     public ResponseEntity<List<Building>> getAllBuildings() {
         List<Building> buildings = buildingService.getAllBuildings();
         return ResponseEntity.ok(buildings);
+    }
+
+    @GetMapping("/{id}/find")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') ")
+    public ResponseEntity<Building> getBuildingById(@PathVariable Long id){
+        Building building = buildingService.getBuildingById(id);
+        return ResponseEntity.ok(building);
     }
 
 

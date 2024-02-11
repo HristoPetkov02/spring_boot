@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Users (
     ID_User IDENTITY(1,1) NOT NULL PRIMARY KEY, --IDENTITY за auto increment
-    Username VARCHAR(32) NOT NULL,
+    Username VARCHAR(32) NOT NULL UNIQUE,
     Email VARCHAR(50) NOT NULL,
     Password VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL
@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS Departments (
     FOREIGN KEY (Faculty_ID) REFERENCES Faculties(ID_Faculty)
 );
 
-CREATE TABLE IF NOT EXISTS Collages (
-    ID_Collage IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    Collage_Name VARCHAR(50) NOT NULL
+CREATE TABLE IF NOT EXISTS Colleges (
+    ID_College IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    College_Name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Buildings (
@@ -42,12 +42,14 @@ CREATE TABLE IF NOT EXISTS Rooms (
 
 CREATE TABLE IF NOT EXISTS Students (
     ID_Student IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    First_Name VARCHAR(32) NOT NULL,
+    Last_Name VARCHAR(32) NOT NULL,
     FN VARCHAR(12) NOT NULL,
     Department_ID INT,
-    Collage_ID INT,
+    College_ID INT,
     Room_ID INT,
 
     FOREIGN KEY (Department_ID) REFERENCES Departments(ID_Department),
-    FOREIGN KEY (Collage_ID) REFERENCES Collages(ID_Collage),
+    FOREIGN KEY (College_ID) REFERENCES Colleges(ID_College),
     FOREIGN KEY (Room_ID) REFERENCES Rooms(ID_Room)
 );

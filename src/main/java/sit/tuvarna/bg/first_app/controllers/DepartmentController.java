@@ -56,11 +56,18 @@ public class DepartmentController {
         return ResponseEntity.ok("Department updated successfully");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
         return ResponseEntity.ok("Department deleted successfully");
+    }
+
+    @GetMapping("/{id}/find")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') ")
+    public ResponseEntity<Department> getDepartmentById(@PathVariable Long id) {
+        Department department = departmentService.getDepartmentById(id);
+        return ResponseEntity.ok(department);
     }
 
     @GetMapping("/all")

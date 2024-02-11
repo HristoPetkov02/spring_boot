@@ -16,7 +16,13 @@ public class Student {
     @Column(name = "ID_Student")
     private Long id;
 
-    @Column(name = "FN", length = 12, nullable = false)
+    @Column(name = "First_Name", length = 50, nullable = false)
+    private String firstName;
+
+    @Column(name = "Last_Name", length = 50, nullable = false)
+    private String lastName;
+
+    @Column(name = "FN", length = 12, nullable = false )
     private String fn;
 
     @ManyToOne
@@ -25,7 +31,7 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "Collage_ID")
-    private Collage collage;
+    private College college;
 
     @ManyToOne
     @JoinColumn(name = "Room_ID")

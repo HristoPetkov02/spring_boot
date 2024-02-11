@@ -54,4 +54,9 @@ public class DepartmentService {
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
     }
+
+    public Department getDepartmentById(Long id) {
+        return departmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Department not found with id: " + id));
+    }
 }

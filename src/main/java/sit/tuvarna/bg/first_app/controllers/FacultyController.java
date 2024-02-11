@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sit.tuvarna.bg.first_app.ExcelUtils;
 import sit.tuvarna.bg.first_app.services.FacultyService;
 import sit.tuvarna.bg.first_app.tables.Faculty;
+import sit.tuvarna.bg.first_app.users.Role;
 
 import java.io.IOException;
 import java.util.List;
