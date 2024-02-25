@@ -1,6 +1,8 @@
 package sit.tuvarna.bg.first_app.config;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,9 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private final UserDetailsService userDetailsService;
 
-
     @Override
     protected void doFilterInternal(
+            //ползвам @NonNull за да не бъде null
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException
@@ -46,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String authHeader = request.getHeader("Authorization");//тука ще е token-а
+        String authHeader = request.getHeader("Authorization");
         String jwt;
         String username;
 
@@ -55,28 +57,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        jwt = authHeader.substring(7);//Bearer е 6 и винаги почва с Bearer
-        username = jwtService.extractUsername(jwt);
+        try {
+            jwt = authHeader.substring(7);//Bearer е 6 и винаги почва с Bearer
+            username = jwtService.extractUsername(jwt);
 
-        //проверка дали username има стойност и дали е Authenticated
-        if (username!=null && SecurityContextHolder.getContext().getAuthentication() == null){
-            //ако if е вярно то тогава значи че потребителя не е Authenticated
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            //проверка дали username има стойност и дали е Authenticated
+            if (username!=null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.isTokenValid(jwt,userDetails)){
                 //ако токена е валиден ще update-на Security Context Holder
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,//да няма credentials
-                        userDetails.getAuthorities());
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,//да няма credentials
+                            userDetails.getAuthorities());
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        } catch (ExpiredJwtException ex) {
+            //ако токена е изтекъл
+            //връщам 401 и пиша грешка
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            //използвам response.getWriter().write за да сложа съобщение в тялото на response
+            response.getWriter().write("Unauthorized - Token expired");
+            return;
+        }
+        catch (JwtException ex) {
+            //ако токена е невалиден
+            //връщам 401 и пиша грешка
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            //използвам response.getWriter().write за да сложа съобщение в тялото на response
+            response.getWriter().write("Unauthorized - Invalid token");
+            return;
         }
 
         filterChain.doFilter(request, response);
     }
-
-
 }
